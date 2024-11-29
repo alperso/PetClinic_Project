@@ -1,0 +1,30 @@
+logging:
+  level:
+    '[org.springframework.web]': TRACE
+  file: logs/petclinic.log
+
+#logging.file=logs/petclinic.log demek
+#logging.level.org.springframework.web=TRACE
+
+
+#Loglamayı yazmak icin 
+#Tamamen kapalıden en detaylı düzeyde açıga göre siralanır.
+ 
+#En detaylı : TRACE
+#Tamamen Kapalı : OFF
+ 
+ #OFF
+ #FATAL
+ #ERROR
+ #WARN
+ #INFO
+ #DEBUG
+ #TRACE
+
+
+  #logging.level.root=INFO
+  #logging.level.org.hibernate.type=TRACE
+  #logging.level.org.springframework.web=DEBUG
+
+
+  #logging.file=/tmp/petclinic.log
