@@ -19,15 +19,24 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-		<!-- Uygulamanın sağlıklı çalışıp çalışmadığını göstermek icim lışşamoşor -->
+			<!-- Uygulamanın sağlıklı çalışıp çalışmadığını göstermek icim lışşamoşor -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-		<!-- Tarayıcıda otomatik olarak update yapmak için kullanılır, anında ekrana yansıtılır -->
+			<!-- Tarayıcıda otomatik olarak update yapmak için kullanılır, anında 
+				ekrana yansıtılır -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional> <!-- Sadece gelistirme ortamında otomatik olarak uygulamayi calistirir demek -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.36</version>
+			<scope>provided</scope>
+			<!-- Derleme asamasinda kullanilir build paketine dahil edilmez demek -->
 		</dependency>
 	</dependencies>
 
