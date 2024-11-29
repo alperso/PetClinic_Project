@@ -31,6 +31,7 @@
 			<optional>true</optional> <!-- Sadece gelistirme ortamında otomatik olarak uygulamayi calistirir demek -->
 		</dependency>
 
+		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse  (IDE görmüyor dahil etmezsek)-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
