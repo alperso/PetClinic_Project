@@ -31,7 +31,7 @@
 			<optional>true</optional> <!-- Sadece gelistirme ortamında otomatik olarak uygulamayi calistirir demek -->
 		</dependency>
 
-		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse
+		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse 
 			(IDE görmüyor dahil etmezsek) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -41,7 +41,7 @@
 			<!-- Derleme asamasinda kullanilir build paketine dahil edilmez demek -->
 		</dependency>
 
-		<!-- Tomcat ile calisirken JSP sayfalarının derlenebilmesi icin jasper
+		<!-- Tomcat ile calisirken JSP sayfalarının derlenebilmesi icin jasper 
 			compilerin projein classpath(pom.xml)inde yer alması gereklidir. -->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -49,10 +49,42 @@
 		</dependency>
 
 		<dependency>
-			<!-- Jstl tag kutuphanesinin html e benzeyen taglerini(anotosyon) kullanmamızı saglar -->
+			<!-- Jstl tag kutuphanesinin html e benzeyen taglerini(anotosyon) kullanmamızı 
+				saglar -->
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
+
+		<!-- JUnit4 Test Versiyonu icin -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope> <!-- projeye bu bagimlılıkları artifacte (build paketine) dahil etmiyor -->
+		</dependency>
+		<!-- Hamcrest, Java'da koşullu testler yazarken daha esnek ve güçlü eşleştirme yöntemleri sunan bir kütüphanedir. 
+		Özellikle, assertion (doğrulama) işlemlerinde daha doğal, okunabilir ve esnek ifadeler yazmanıza yardımcı olur. 
+		assertThat(5, equalTo(5)); // Beklenen değer 5, gerçek değer de 5. Test başarılı. gibi
+		-->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<scope>test</scope> <!-- projeye bu bagimlılıkları artifacte (build paketine) dahil etmiyor -->
+		</dependency>
+	
+		<!-- JUnit5 Test Versiyonu için -->
+		<!--<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>-->
 	</dependencies>
 
 	<properties>
