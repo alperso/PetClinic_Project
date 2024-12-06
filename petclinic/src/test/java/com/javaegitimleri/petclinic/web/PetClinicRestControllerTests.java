@@ -1,5 +1,9 @@
 package com.javaegitimleri.petclinic.web;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -60,6 +64,28 @@ public class PetClinicRestControllerTests {
 		// ResponseEntity<Owner> response = restTemplate.getForEntity("http://localhost:8080/rest/getOwner/1",Owner.class);
 		// MatcherAssert.assertThat(response.getStatusCodeValue(),Matchers.equalTo(200)); //gelen sonuc 200 response mu
 		// MatcherAssert.assertThat(response.getBody().getFirstName(),Matchers.equalTo("Alper")); //gelen degerin Alper olduguna bakıyoruz.
+	}
+	
+	@Test
+	public void testGetOwnersByLastName() {
+		ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:8080/rest/getOwnersWithLastName?ln=ONER", List.class);
+		MatcherAssert.assertThat(response.getStatusCodeValue(), Matchers.equalTo(200));
+		List<Map<String,String>> body = response.getBody();
+		List<String> firstNames = body.stream().map(e->e.get("firstName")).collect(Collectors.toList());
+		
+		//Başarısız Durum
+		//MatcherAssert.assertThat(firstNames,Matchers.containsInAnyOrder("Alper","Mahmut","Asa"));
+		//Başarılı Durum
+		MatcherAssert.assertThat(firstNames,Matchers.containsInAnyOrder("Alper"));
+		
+		/*
+		 * MatcherAssert.assertThat(): Bu, bir doğrulama (assertion) yapar. firstNames koleksiyonunun, belirtilen şartları sağladığından emin olmak için kullanılır.
+		 * Matchers.containsInAnyOrder("Alper"): 
+		 * Bu, firstNames koleksiyonunun öğelerinin herhangi bir sırayla "Alper" 
+		 * öğesini içerip içermediğini kontrol eder. Yani, koleksiyonun sırası önemli değildir; 
+		 * yalnızca belirli öğe veya öğeler olup olmadığına bakılır.
+		 * 
+		 * */
 	}
 
 }
