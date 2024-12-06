@@ -4,6 +4,9 @@
 /RemoteSystemsTempFiles/
 /Servers/
 /.idea/
+
+/petclinic/.factorypath
+/petclinic/logs
  
 */target/
 */build/
