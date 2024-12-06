@@ -5,7 +5,7 @@
 	<groupId>com.javaegitimleri</groupId>
 	<artifactId>petclinic</artifactId>
 	<version>1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -31,13 +31,27 @@
 			<optional>true</optional> <!-- Sadece gelistirme ortamında otomatik olarak uygulamayi calistirir demek -->
 		</dependency>
 
-		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse  (IDE görmüyor dahil etmezsek)-->
+		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse
+			(IDE görmüyor dahil etmezsek) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.36</version>
 			<scope>provided</scope>
 			<!-- Derleme asamasinda kullanilir build paketine dahil edilmez demek -->
+		</dependency>
+
+		<!-- Tomcat ile calisirken JSP sayfalarının derlenebilmesi icin jasper
+			compilerin projein classpath(pom.xml)inde yer alması gereklidir. -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+
+		<dependency>
+			<!-- Jstl tag kutuphanesinin html e benzeyen taglerini(anotosyon) kullanmamızı saglar -->
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
 		</dependency>
 	</dependencies>
 
