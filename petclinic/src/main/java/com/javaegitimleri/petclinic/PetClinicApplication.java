@@ -6,14 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import javax.annotation.PostConstruct;
 /*
 @EnableConfigurationProperties kullanarak
 PetClinicProperties sınıfından bir bir bean olusturacak
 Properties dosyasıyla erişip değerleri alabilecegiz
-*/
 
+@ServletComponentScan
+Servletleri scan etmesi icin kullanilir.
+claspath de servlet ve Filterlern olan sınıfları otomatik tespit eder.
+
+
+*/
+@ServletComponentScan
 @SpringBootApplication
 @EnableConfigurationProperties(value=PetClinicProperties.class)
 public class PetClinicApplication {
