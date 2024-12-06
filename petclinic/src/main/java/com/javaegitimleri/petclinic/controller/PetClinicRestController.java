@@ -3,13 +3,18 @@ package com.javaegitimleri.petclinic.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javaegitimleri.petclinic.exception.OwnerNotFoundException;
 import com.javaegitimleri.petclinic.model.Owner;
 import com.javaegitimleri.petclinic.service.PetClinicService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/rest")
@@ -28,6 +33,15 @@ public class PetClinicRestController {
 	public List<Owner> getOwners2() {
 		List<Owner> findOwners = petClinicService.findOwners();
 		return findOwners;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="/owners3")
+	public ResponseEntity<List<Owner>> getOwners3(){
+	    List<Owner> findOwners = petClinicService.findOwners();
+	    return ResponseEntity
+	        .status(HttpStatus.CREATED) // Durum kodunu değiştirdik
+	        .header("Custom-Header", "PetClinicApp") // Özel bir başlık ekledik
+	        .body(findOwners);
 	}
 	
 	/*
@@ -56,5 +70,35 @@ public class PetClinicRestController {
 	 * List<Owner>: Basit bir JSON dönecekseniz ve yanıt üzerinde ekstra kontrol gerekmiyorsa.
 	 * 
 	 */
-
+	
+	
+	/*-------------------------------------------------------------*/
+	
+	//http://localhost:8080/rest/getOwnersWithLastName?ln=ONER
+	
+	@RequestMapping(method=RequestMethod.GET,value = "/getOwnersWithLastName")
+	public ResponseEntity<List<Owner>> getOwnersWithLastName(@RequestParam("ln") String lastName){
+		
+		List<Owner> findOwners = petClinicService.findOwners(lastName);
+		return ResponseEntity.ok(findOwners);
+		
+	}
+	
+	//http://localhost:8080/rest/getOwner/1
+	
+	@RequestMapping(method=RequestMethod.GET,value="/getOwner/{id}")
+	public ResponseEntity<Owner> getOwner(@PathVariable("id") Long id) {
+		try {
+			Owner owner=petClinicService.findOwner(id);
+			return ResponseEntity.ok(owner);
+		} catch (OwnerNotFoundException ex){
+			return ResponseEntity.notFound().build();
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			//return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("500 Hata Verdi Aslan");
+		}
+		
+		//notFound(): Yanıtın durum kodunu 404 Not Found olarak ayarlıyor.
+		//build(): Yanıtın gövdesiz (boş) olarak dönmesini sağlıyor.
+	}
 }
