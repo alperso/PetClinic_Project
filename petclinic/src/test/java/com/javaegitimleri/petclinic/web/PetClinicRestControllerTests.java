@@ -1,5 +1,6 @@
 package com.javaegitimleri.petclinic.web;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,6 +112,42 @@ public class PetClinicRestControllerTests {
 		
 		//Başarılı Durum With hasItem
 		//MatcherAssert.assertThat(firstNames,Matchers.hasItem("Alper")); //icinde Alper var mı
+	}
+
+	@Test
+	public void testCreateOwner() {
+		Owner owner = new Owner();
+		owner.setFirstName("Hakan");
+		owner.setLastName("Yavaş");
+		
+		//http://localhost:8080/rest/createOwner/21312312312
+		URI postForLocation = restTemplate.postForLocation("http://localhost:8080/rest/createOwner", owner);
+
+		String path = "http://localhost:8080/rest/getOwner/"+splitForUrl(postForLocation.getPath());//ekleneni alıyorum
+		Owner owner2= restTemplate.getForObject(path, Owner.class);
+		
+		MatcherAssert.assertThat(owner2.getFirstName(), Matchers.equalTo(owner.getFirstName()));
+		MatcherAssert.assertThat(owner2.getLastName(), Matchers.equalTo(owner.getLastName()));
+	}
+	
+	public String splitForUrl(String url) {
+		
+		//Eğer URL'deki son long değeri split kullanarak bulmak istiyorsanız, aşağıdaki yöntemi kullanabilirsiniz.
+		Long lastLong = 0L;
+		String[] parts = url.split("/");
+
+	        // Get the last part
+	        String lastPart = parts[parts.length - 1];
+
+	        try {
+	            // Convert the last part to a long
+	            lastLong = Long.parseLong(lastPart);
+	            System.out.println("Last long value in URL: " + lastLong);
+	        } catch (NumberFormatException e) {
+	            System.out.println("No valid long value found in the URL.");
+	        }
+	        
+	  return lastLong.toString();
 	}
 
 }
