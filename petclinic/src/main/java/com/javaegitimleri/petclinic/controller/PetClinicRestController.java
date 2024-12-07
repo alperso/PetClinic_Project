@@ -105,7 +105,7 @@ public class PetClinicRestController {
 		//build(): Yanıtın gövdesiz (boş) olarak dönmesini sağlıyor.
 	}
 	
-	/*-------------------------------------------------------------*/
+	/*-----------------------------createOwner--------------------------------*/
 	
 	/*
 	 * @RequestBody Owner owner:
@@ -127,5 +127,26 @@ public class PetClinicRestController {
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+
+	/*-----------------------------updateOwner--------------------------------*/
+
+	@RequestMapping(method=RequestMethod.PUT,value="/updateOwner/{id}")
+	public ResponseEntity<?> updateOwner(@PathVariable("id") Long id, @RequestBody Owner ownerRequest){
+		
+		try {
+			Owner owner = petClinicService.findOwner(id); //once guncellenecek owneri sorguluyorum eger yoksa catch icine dusecek
+			owner.setFirstName(ownerRequest.getFirstName());
+			owner.setLastName(ownerRequest.getLastName());
+			petClinicService.updateOwner(owner);
+			
+			return ResponseEntity.ok().build();
+		} catch(OwnerNotFoundException ex) {
+			//bulamaz ise
+			return ResponseEntity.notFound().build();
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
 	}
 }

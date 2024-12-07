@@ -114,6 +114,8 @@ public class PetClinicRestControllerTests {
 		//MatcherAssert.assertThat(firstNames,Matchers.hasItem("Alper")); //icinde Alper var mı
 	}
 
+	/*--------------------------------------------------------------*/
+	
 	@Test
 	public void testCreateOwner() {
 		Owner owner = new Owner();
@@ -149,5 +151,23 @@ public class PetClinicRestControllerTests {
 	        
 	  return lastLong.toString();
 	}
+	
+	/*--------------------------------------------------------------*/
 
+	@Test
+	public void testUpdateOwner() {
+		Owner owner = restTemplate.getForObject("http://localhost:8080/rest/getOwner/4", Owner.class);//1 olan objeyi guncellemek istiyorum
+		
+		MatcherAssert.assertThat(owner.getFirstName(), Matchers.equalTo("Fidan")); //gelen objenin firstname i fidan mi ?
+		
+		owner.setFirstName("Ahmet");
+		owner.setLastName("AhmetCan"); 
+		
+		restTemplate.put("http://localhost:8080/rest/updateOwner/4", owner);
+		
+		Owner owner2 = restTemplate.getForObject("http://localhost:8080/rest/getOwner/4", Owner.class);
+		
+		MatcherAssert.assertThat(owner2.getFirstName(), Matchers.equalTo("Ahmet"));
+		MatcherAssert.assertThat(owner2.getLastName(), Matchers.equalTo("AhmetCan"));
+	}
 }
