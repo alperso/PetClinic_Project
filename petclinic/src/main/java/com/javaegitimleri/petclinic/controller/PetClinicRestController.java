@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.javaegitimleri.petclinic.exception.InternalServerException;
 import com.javaegitimleri.petclinic.exception.OwnerNotFoundException;
 import com.javaegitimleri.petclinic.model.Owner;
 import com.javaegitimleri.petclinic.service.PetClinicService;
@@ -162,6 +163,22 @@ public class PetClinicRestController {
 			return ResponseEntity.notFound().build();
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	
+	/*-----------------------------deleteOwner With ResponseStatus--------------*/
+	@RequestMapping(method=RequestMethod.DELETE,value="/deleteOwner2/{id}")
+	public ResponseEntity<?> deleteOwner2(@PathVariable("id") Long id) {
+		try {
+			petClinicService.deleteOwner(id);
+			
+			return ResponseEntity.ok().build();
+		} catch(OwnerNotFoundException ex) {
+			//bulamaz ise
+			throw ex;
+		} catch (Exception ex) {
+			throw new InternalServerException(ex);
 		}
 	}
 }
