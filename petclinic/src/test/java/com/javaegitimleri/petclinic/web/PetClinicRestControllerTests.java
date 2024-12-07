@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.javaegitimleri.petclinic.model.Owner;
@@ -169,5 +171,26 @@ public class PetClinicRestControllerTests {
 		
 		MatcherAssert.assertThat(owner2.getFirstName(), Matchers.equalTo("Ahmet"));
 		MatcherAssert.assertThat(owner2.getLastName(), Matchers.equalTo("AhmetCan"));
+	}
+	
+	/*--------------------------------------------------------------*/
+	
+	@Test
+	public void testDeleteOwner() {
+		
+		Owner owner = restTemplate.getForObject("http://localhost:8080/rest/getOwner/4", Owner.class);//4 olan objeyi silmek istiyorum
+		MatcherAssert.assertThat(owner.getFirstName(), Matchers.equalTo("Fidan")); //gelen objenin firstname i fidan mi ?
+		
+		restTemplate.delete("http://localhost:8080/rest/deleteOwner/4");
+		
+		//Silinen kaydıya bakalım. Bu sefer getForEntity ile yapalım. 
+			try {
+				restTemplate.getForEntity("http://localhost:8080/rest/getOwner/4", Owner.class);
+				Assert.fail("Böyle bir owner bulunamadı"); //belirli bir durum gerçekleşmediğinde testin başarısız olmasını zorlamak için kullanılır.
+				//testin başarılı olması için restTemplate.getForEntity çağrısının bir hata fırlatması beklenir. 
+				//Eğer hata alınmazsa veya beklenmeyen bir şekilde hata fırlatılmazsa test başarısız olur.
+			} catch (RestClientException ex) {
+				
+			}
 	}
 }

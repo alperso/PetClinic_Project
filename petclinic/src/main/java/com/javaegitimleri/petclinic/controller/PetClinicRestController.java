@@ -149,4 +149,19 @@ public class PetClinicRestController {
 		}
 
 	}
+	
+	/*-----------------------------deleteOwner--------------------------------*/
+	@RequestMapping(method=RequestMethod.DELETE,value="/deleteOwner/{id}")
+	public ResponseEntity<?> deleteOwner(@PathVariable("id") Long id) {
+		try {
+			petClinicService.deleteOwner(id);
+			
+			return ResponseEntity.ok().build();
+		} catch(OwnerNotFoundException ex) {
+			//bulamaz ise
+			return ResponseEntity.notFound().build();
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 }
