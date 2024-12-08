@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -181,4 +184,72 @@ public class PetClinicRestController {
 			throw new InternalServerException(ex);
 		}
 	}
+
+
+	/*-------------HATEOAS(Service API'nin işleyişini ve sonraki adımları ogrenmek)----------------*/
+	/*
+	HATEOAS (Hypermedia As The Engine Of Application State), RESTful API'ler için bir tasarım prensibidir.
+	Bu yaklaşım, istemcilere bir kaynağın durumunu ve o kaynakla yapılabilecek işlemleri hypermedia (bağlantılar) aracılığıyla sağlar.
+	Yani, bir API yanıtında, sadece veriyi değil, aynı zamanda o veriye ilişkin hangi işlemlerin yapılabileceğini belirten bağlantılar da
+	yer alır.
+
+	İstemciler, sunucudan dönen bağlantılar (links) sayesinde API'nin işleyişini ve sonraki adımları öğrenir.
+	İstemcilerin API'nin iç yapısını bilmesine gerek kalmaz, çünkü hangi işlemleri yapabileceğini hypermedia bağlantıları belirtir.
+
+	Spring Boot'ta, HATEOAS desteği, spring-boot-starter-hateoas kütüphanesi kullanılarak (pom.xml) kolayca sağlanır.
+	Spring HATEOAS, hypermedia ile çalışan REST API'ler geliştirmek için yardımcı araçlar sunar.
+	*/
+
+	//produces:HTTP isteği için sunucunun hangi formatta yanıt vereceğini belirtir.
+	//@RequestMapping(method = RequestMethod.GET, value = "/owners", produces = {"application/json", "application/xml"})
+	@RequestMapping(method=RequestMethod.GET,value="/getOwnerAsHateoasResource/{id}",produces = "application/json")
+	public ResponseEntity<?> getOwnerAsHateoasResource(@PathVariable("id") Long id) {
+		try {
+			Owner owner=petClinicService.findOwner(id);
+
+			// HATEOAS bağlantısı oluşturuluyor
+			Link self = ControllerLinkBuilder.linkTo(PetClinicRestController.class).slash("/getOwnerAsHateoasResource/"+id).withSelfRel();
+			Link createOwner = ControllerLinkBuilder.linkTo(PetClinicRestController.class).slash("/createOwner/").withRel("createOwner");
+			Link deleteOwner = ControllerLinkBuilder.linkTo(PetClinicRestController.class).slash("/deleteOwner/"+id).withRel("deleteOwner");
+			Link updateOwner = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(PetClinicRestController.class).updateOwner(id, owner)).withRel("updateOwner");
+
+			// EntityModel ile Owner nesnesini sarıyoruz ve bağlantıları ekliyoruz
+			EntityModel<Owner> resource = new EntityModel<>(owner);
+			resource.add(self);
+			resource.add(createOwner);
+			resource.add(deleteOwner);
+			resource.add(updateOwner);
+
+			return ResponseEntity.ok(resource);
+		} catch (OwnerNotFoundException ex){
+			return ResponseEntity.notFound().build();
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+
+
+		/*
+		*  Request:http://localhost:8080/rest/getOwnerAsHateoasResource/1
+		*  Response:
+		* {
+		  "id": 1,
+		  "firstName": "Alper",
+		  "lastName": "ONER",
+		  "_links": {
+			"self": {
+			  "href": "http://localhost:8080/rest/getOwnerAsHateoasResource/1"
+			},
+			"createOwner": {
+			  "href": "http://localhost:8080/rest/createOwner"
+			},
+			"deleteOwner": {
+			  "href": "http://localhost:8080/rest/deleteOwner/1"
+			},
+			"updateOwner": {
+			  "href": "http://localhost:8080/rest/updateOwner/1"
+			}
+		  }
+		}*/
+	}
+
 }
