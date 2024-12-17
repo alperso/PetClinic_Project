@@ -1,6 +1,5 @@
 H2 Gomulu DataBase
 
-
 <!-- H2 Gomulu DB / http://localhost:8080/h2-console ile erisim saglariz-->
 <dependency>
     <groupId>com.h2database</groupId>
@@ -56,3 +55,42 @@ jdbc:h2:file:C:/Users/alperoner/test;AUTO_SERVER=TRUE
     spring.datasource.username
     spring.datasource.password
     ekleyerek configure edebiliriz.
+
+
+* Connection Pool
+    Spring boot connection Pool kabiliyeti saglamaktadır.
+    Default olarak HikkariCp tercih edilir.
+    spring framework jdbc ve spring framework jpa ile zaten dahil olmaktadır.
+    Eger classpathte hikariCp çıkartılmıssa tomcat-jdbc ye bakılır bu durumda tomcatjdbc kullanılacaktır.
+    Son olarak da Commons DBCP2 tercih edilir.
+ 
+* Connection Pool Ayarlarmaları
+    Application altından özelleştirilebilir.
+    spring.datasource.tomcat.*
+    spring.datasource.hikkari.*
+    spring.datasource.dbcp2.*
+ 
+Burada spring zaten hikkariyi kullanacaktır özelleştirmek yada digerini kullanmak istersek 
+    spring.datasource.type=org.apache.tomcat.jdbc.pool.DataSource olarak konfigure edilmektedir.
+    
+---------------------------------------------------------------
+    
+Data Initialization(schema.sql ve data.sql icindeki sql leri calistirma)
+Spring Boot classpath'de 
+*>>>>>> schema.sql ve data.sql 
+script dosyalari mevcut ise bu 
+dosyalarin icindeki sql ifadelerini bootstrap sirasinda calistirmaktadir
+
+application.properties icinde
+*spring.datasource.platform=all
+*spring.datasource.platform=dev
+*spring.datasource.platform=test
+
+gibi degerler verilebilir. Sırayla
+
+1-schema.${platform}.sql
+2-schema.sql
+3-data.${platform}.sql
+4-schema.${platform}.sql
+
+calistirilir.
