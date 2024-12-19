@@ -33,6 +33,17 @@
 
 		<!-- Lombok STS install dokumani : https://projectlombok.org/setup/eclipse 
 			(IDE görmüyor dahil etmezsek) -->
+
+		<!-- Lombok aktivasyonu dokuman -> https://projectlombok.org/setup/eclipse -->
+		<!-- Lombok aktivasyonu ide de aktif etme ->help -> install new software 
+			-> https://projectlombok.org/p2 -->
+		<!-- Yuklendikten sonra ideyi restart et yada ac kapa yap aktiflesir -->
+		<!-- scope -> provided Bu sadece derleme ve calistirma zamanında dahil eder 
+			paketlemeye dahil etmez -->
+	
+		<!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> 
+			<version>1.18.30</version> <scope>provided</scope> </dependency> -->
+			
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
