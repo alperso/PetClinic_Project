@@ -179,21 +179,24 @@ public class PetClinicRestControllerTests {
 	@Test
 	public void testDeleteOwner() {
 		
-		Owner owner = restTemplate.getForObject("http://localhost:8080/rest/getOwner/4", Owner.class);//4 olan objeyi silmek istiyorum
-		MatcherAssert.assertThat(owner.getFirstName(), Matchers.equalTo("Fidan")); //gelen objenin firstname i fidan mi ?
+//		Owner owner = restTemplate.getForObject("http://localhost:8080/rest/getOwner/2", Owner.class);//4 olan objeyi silmek istiyorum
+//		MatcherAssert.assertThat(owner.getFirstName(), Matchers.equalTo("Ziya")); //gelen objenin firstname i fidan mi ?
 		
-		restTemplate.delete("http://localhost:8080/rest/deleteOwner/4");
+		restTemplate.delete("http://localhost:8080/rest/deleteOwner/2");
 		
 		//Silinen kaydıya bakalım. Bu sefer getForEntity ile yapalım. 
-			try {
-				restTemplate.getForEntity("http://localhost:8080/rest/getOwner/4", Owner.class);
-				Assert.fail("Böyle bir owner bulunamadı"); //belirli bir durum gerçekleşmediğinde testin başarısız olmasını zorlamak için kullanılır.
-				//testin başarılı olması için restTemplate.getForEntity çağrısının bir hata fırlatması beklenir. 
-				//Eğer hata alınmazsa veya beklenmeyen bir şekilde hata fırlatılmazsa test başarısız olur.
-			} catch (RestClientException ex) {
-				
-			}
+		try {
+			restTemplate.getForEntity("http://localhost:8080/rest/getOwner/2", Owner.class);
+			Assert.fail("Böyle bir owner bulunamadı"); //belirli bir durum gerçekleşmediğinde testin başarısız olmasını zorlamak için kullanılır.
+			//testin başarılı olması için restTemplate.getForEntity çağrısının bir hata fırlatması beklenir. 
+			//Eğer hata alınmazsa veya beklenmeyen bir şekilde hata fırlatılmazsa test başarısız olur.
+		} catch (RestClientException ex) {
+			
+		}
 	}
+	
+	//Transactional icin test 
+	//if(true) throw new RuntimeException("testing rollback"); vermistik hata vericek
 	
 	/*--------------------------------------------------------------*/
 	

@@ -1,6 +1,7 @@
 logging:
   level:
     '[org.springframework.web]': TRACE
+    '[org.springframework.jdbc.datasource]': DEBUG
   file: logs/petclinic.log
 
 #logging.file=logs/petclinic.log demek
