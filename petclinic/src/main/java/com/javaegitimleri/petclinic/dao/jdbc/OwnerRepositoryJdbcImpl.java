@@ -188,7 +188,8 @@ import com.javaegitimleri.petclinic.model.Owner;
  * */
 
 //@Repository
-@Repository("ownerRepository")
+//@Repository("ownerRepository")  jpa ile deneyecegim icin dao.jpa->OwnerRepositoryJpaImpl içine yazdım
+@Repository
 public class OwnerRepositoryJdbcImpl implements OwnerRepository {
 
 	@Autowired
