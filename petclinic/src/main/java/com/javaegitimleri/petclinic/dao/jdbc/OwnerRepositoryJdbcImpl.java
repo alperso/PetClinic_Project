@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import com.javaegitimleri.petclinic.dao.OwnerRepository;
 import com.javaegitimleri.petclinic.model.Owner;
 
-/*
+/****************************************************
+ * Dublicate impl hatası neden olusur?
+ * 
  * Sadece @Repository yazarsam problem yaratır? Neden ?
  * Bizim OwnerRepository'nin impl yaptıgı 2 tane repomuz var.
  * 
@@ -66,20 +68,20 @@ import com.javaegitimleri.petclinic.model.Owner;
  * 
  * Detay:
  * 1. @Primary Anotasyonu Kullanmak:
- * 		Eğer bir bean'in varsayılan olarak seçilmesini istiyorsanız, o bean üzerine @Primary anotasyonu ekleyebilirsiniz.
- * 
+  		Eğer bir bean'in varsayılan olarak seçilmesini istiyorsanız, o bean üzerine @Primary anotasyonu ekleyebilirsiniz.
+  
 			@Repository
 			@Primary
 			public class OwnerRepositoryJdbcImpl implements OwnerRepository {
 	    		// Implementasyon
 			}
 			
- * 		Bu durumda, Spring diğer seçeneklere bakmadan OwnerRepositoryJdbcImpl sınıfını kullanır.
- * 
+  		Bu durumda, Spring diğer seçeneklere bakmadan OwnerRepositoryJdbcImpl sınıfını kullanır.
+  
  * 2. @Qualifier Anotasyonu Kullanmak
- * 		Eğer hangi bean'in kullanılacağını daha belirgin şekilde belirtmek istiyorsanız, @Qualifier anotasyonunu kullanabilirsiniz.
- * 		
- * 		@Service
+  		Eğer hangi bean'in kullanılacağını daha belirgin şekilde belirtmek istiyorsanız, @Qualifier anotasyonunu kullanabilirsiniz.
+  		
+  		@Service
 		public class PetClinicServiceImpl {
 
     		private final OwnerRepository ownerRepository;
@@ -151,12 +153,39 @@ import com.javaegitimleri.petclinic.model.Owner;
 		@Bean(name = "customOwnerRepository") ismini elle verebilirsin.
 		
 		
- * 
- * 
- * 
+ * 4. @Repository("ownerRepository") ile isimlendirmek
+ * @Repository ile bean adını belirleyebilirsiniz. Spring, @Repository, @Service, ve @Component 
+ * gibi anotasyonlarla tanımlanan sınıfları otomatik olarak bir Spring bean'i haline getirir. 
+ * Eğer @Repository anotasyonunda bir isim (bean adı) belirtirseniz, Spring o bean'e bu adı verir.
+  
+		@Repository("ownerRepositoryJdbcImpl")
+		public class OwnerRepositoryJdbcImpl implements OwnerRepository {
+		    // JDBC ile ilgili işlemler burada
+		}
+		
+		@Repository("ownerRepositoryInMemoryImpl")
+		public class OwnerRepositoryInMemoryImpl implements OwnerRepository {
+		    // In-memory işlemler burada
+		}
+		
+		Eğer bu bean'lerden birini açıkça seçmek isterseniz, @Qualifier kullanabilirsiniz:
+		
+		@Service
+		public class PetClinicServiceImpl {
+		
+		    private final OwnerRepository ownerRepository;
+		
+		    // ownerRepositoryJdbcImpl bean'ini seçiyoruz
+		    public PetClinicServiceImpl(@Qualifier("ownerRepositoryJdbcImpl") OwnerRepository ownerRepository) {
+		        this.ownerRepository = ownerRepository;
+		    }
+		}
+		
+		Avantajları:
+		Daha Az Konfigürasyon: @Repository ile otomatik olarak bean tanımlaması yapıldığı için @Configuration sınıfında @Bean metotları yazmanıza gerek kalmaz.
+		Açık Belirleme: Bean adını @Repository anotasyonunda belirterek, hangi bean'in kullanılacağını daha kolay yönetebilirsiniz.
  * 
  * */
-
 
 //@Repository
 @Repository("ownerRepository")
@@ -205,8 +234,9 @@ public class OwnerRepositoryJdbcImpl implements OwnerRepository {
 
 	@Override
 	public void deleteOwner(Long ownerId) {
-		
-
+	String sql = "delete from public.t_owner where id = ?";
+	jdbcTemplate.update(sql,ownerId);
+	//Bu tablo bir tabloya bagli ise once child tablodaki verileri silinmesi gereklidir.
 	}
 
 	@Override
@@ -311,5 +341,140 @@ public class OwnerRepositoryJdbcImpl implements OwnerRepository {
    	 *        List<Owner> result = namedParameterJdbcTemplate.query(
    	 *        sql, paramMap,rowMapper);
 	 */
+	
+//Farkli Bir Not --------------------------------------------------	
+//	* Dublike impl hatası neden olusur?
+//		    OwnerRepository interface inden 
+//		        - OwnerRepositoryInMemoryImpl
+//		        - OwnerRepositoryJdbcImpl
+//		    yaptıgımızda spring ayaga kalkarken hata almaktadır.
+//		    public interface OwnerRepository {}
+//		 
+//		    @Repository
+//		    public class OwnerRepositoryJdbcImpl implements OwnerRepository {}
+//		 
+//		    @Repository
+//		    public class OwnerRepositoryInMemoryImpl implements OwnerRepository {}
+//		 
+//		    ***************************
+//		    APPLICATION FAILED TO START
+//		    ***************************
+//		    Description:
+//		    Field ownerRepository in com.javaegitimleri.petclinic.service.PetClinicServiceImpl required a single bean, but 2 were found:
+//		    	- ownerRepositoryJdbcImpl: defined in file [C:\Dev\petclinic-project\petclinic\target\classes\com\javaegitimleri\petclinic\dao\jdbc\OwnerRepositoryJdbcImpl.class]
+//		    	- ownerRepositoryInMemoryImpl: defined in file [C:\Dev\petclinic-project\petclinic\target\classes\com\javaegitimleri\petclinic\dao\mem\OwnerRepositoryInMemoryImpl.class]
+//
+//		    Action:
+//		    Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed
+//		 
+//		    ----------------------------------------------------------------------------------------------------------------
+//		    Burada birkaç farklı çözüm var 
+//		    1-Springboot için ya impl yaptıklarımızdan birisine @Repository("ownerRepository") olarak yazdıgımızda hata almayacaktır.
+//		 
+//		    
+//		        public class OwnerRepositoryJdbcImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//		        @Repository("ownerRepositoryInMemoryImpl")
+//		        public class OwnerRepositoryInMemoryImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//
+//		 
+//		        @Service
+//		        public class OrderService {
+//		            @Autowired
+//		            private final OrderService paymentService;
+//		        }
+//		 
+//		    2-autowire ettigimiz Petclinic clasında @Qualifier("") olarak seçilim yaparak configure etmemiz gereklidir.
+//		 
+//		        @Repository("ownerRepositoryJdbcImpl")
+//		        public class OwnerRepositoryJdbcImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//		        @Repository("ownerRepositoryInMemoryImpl")
+//		        public class OwnerRepositoryInMemoryImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//		        //Çagıracagımız servis katmanında Qualifier kullanarak taglerinden seçim yaptırabiliriz.
+//		        @Service
+//		        public class OrderService {
+//		 
+//		            private final OrderService paymentService;
+//		            @Autowired
+//		            public OrderService(@Qualifier("creditCardPaymentService") PaymentService paymentService) {
+//		                this.paymentService = paymentService;
+//		            }
+//		        }
+//		 
+//		 
+//		    3-Birini @Primary Olarak İşaretleme
+//		 
+//		        Aynı OwnerRepository arayüzünü implement eden iki farklı sınıfın (OwnerRepositoryJdbcImpl ve OwnerRepositoryInMemoryImpl) aynı anda bulunması 
+//		        nedeniyle Spring Boot, hangi sınıfı kullanacağı konusunda karışıklık yaşıyor. Bu hatayı çözmek için birkaç farklı yöntem izleyebilirsiniz:
+//		        Birini @Primary olarak işaretlemek, Spring'e bu bean'i tercih edilen bean olarak kullanmasını söyler.
+//		        @Repository
+//		        public class OwnerRepositoryJdbcImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//		        @Repository
+//		        @Primary
+//		        public class OwnerRepositoryInMemoryImpl implements OwnerRepository {
+//		            // uygulama detayları
+//		        }
+//		 
+//		        @Service
+//		        public class OrderService {
+//		            @Autowired
+//		            private final OrderService paymentService;
+//		        }
+//		 
+//		    4. Configuration Sınıfında Bean Tanımlama 
+//		      		Eğer yukarıdaki iki yöntem işinizi görmüyorsa, bir @Configuration sınıfında hangi bean'in kullanılacağını belirtebilirsiniz:
+//		    		AppConfig.java
+//		    		@Configuration
+//		    		public class AppConfig {
+//		    		    // OwnerRepositoryJdbcImpl bean'ini oluştur ve @Primary olarak işaretle
+//		    		    @Bean
+//		    		    @Primary
+//		    		    public OwnerRepository ownerRepositoryJdbcImpl() {
+//		    		        return new OwnerRepositoryJdbcImpl();
+//		    		    }
+//		    		    // OwnerRepositoryInMemoryImpl bean'ini oluştur
+//		    		    @Bean
+//		    		    public OwnerRepository ownerRepositoryInMemoryImpl() {
+//		    		        return new OwnerRepositoryInMemoryImpl();
+//		    		    }
+//		    		}
+//		    		Service sinifimiz:
+//		    		@Service
+//		    		public class PetClinicServiceImpl {
+//		    		    private final OwnerRepository ownerRepository;
+//		    		    // Spring varsayılan olarak @Primary bean'ini kullanır
+//		    		    public PetClinicServiceImpl(OwnerRepository ownerRepository) {
+//		    		        this.ownerRepository = ownerRepository;
+//		    		    }
+//		    		    // Eğer belirli bir bean istiyorsanız, @Qualifier kullanabilirsiniz
+//		    		    // public PetClinicServiceImpl(@Qualifier("ownerRepositoryInMemoryImpl") OwnerRepository ownerRepository) {
+//		    		    //     this.ownerRepository = ownerRepository;
+//		    		    // }
+//		    		}
+//		    		Bu durumda, Spring @Primary anotasyonu sayesinde varsayılan olarak OwnerRepositoryJdbcImpl'i kullanır.
+//		    		----@Qualifier("ownerRepositoryInMemoryImpl") bunun ownerRepositoryInMemoryImpl oldugunu nasil anliyor?
+//		    		Spring, bean'leri tanımlarken @Bean anotasyonu ile metod adını varsayılan olarak bean adı olarak kullanır. 
+//		    		Bu yüzden, aşağıdaki örnekte @Bean olarak tanımlanan ownerRepositoryInMemoryImpl bean'inin adı ownerRepositoryInMemoryImpl olacaktır.
+//		    		Nasıl Çalışır?
+//		    		Bean İsmi Varsayılan Olarak Metod Adıdır:
+//		    		@Bean anotasyonu kullanıldığında, Spring, varsayılan olarak o metodun adını bean adı olarak alır.
+//		    		Yukarıdaki örnekte, bean adı ownerRepositoryInMemoryImpl olacaktır.
+//		    		@Qualifier ile Eşleşme:
+//		    		@Qualifier("ownerRepositoryInMemoryImpl") yazdığınızda, Spring bu adı kullanarak ilgili bean'i bulur.
+//		    		Bean adının @Qualifier ile verilen adla birebir eşleşmesi gerekir.
+//		    		Ayrıca 
+//		    		@Bean(name = "customOwnerRepository") ismini elle verebilirsin.		
+//
+//		 
+//		    Buradaki islemi eski projelerdeki gibi factory olusturup hangi impl yapacagımıza göre return etmiştik.
 
 }
