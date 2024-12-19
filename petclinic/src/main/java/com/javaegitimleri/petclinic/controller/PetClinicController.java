@@ -3,6 +3,7 @@ package com.javaegitimleri.petclinic.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @Controller, Spring Framework'de kullanılan bir anotasyondur ve temel olarak
@@ -64,6 +65,18 @@ public class PetClinicController {
 	@RequestMapping("/homePage")
 	public String homePage() {
 		return "index"; // src/main/resources/public/index.html'e gider
+	}
+	
+	/*
+	 * Spring security icin
+	 * localhost:8080 ve localhost:8080/index yazidigimda index.jsp calissin diye
+	 * 
+	 * */
+	@RequestMapping(value= {"/","/index.html"})
+	public ModelAndView index() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("index");
+		return mav;
 	}
 
 }
