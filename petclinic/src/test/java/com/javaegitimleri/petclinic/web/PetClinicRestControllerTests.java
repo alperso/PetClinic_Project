@@ -1,6 +1,8 @@
 package com.javaegitimleri.petclinic.web;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +13,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.support.BasicAuthenticationInterceptor;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +48,13 @@ public class PetClinicRestControllerTests {
 	public void setUp() {
 		restTemplate = new RestTemplate();
 
+        // Yeni BasicAuthenticationInterceptor kullanimi
+        ClientHttpRequestInterceptor basicAuthInterceptor = new BasicAuthenticationInterceptor("admin", "admin1");
+        restTemplate.setInterceptors(Collections.singletonList(basicAuthInterceptor));
+
+        //Eskisi
+		//BasicAuthenticationInterceptor interceptor=new BasicAuthenticationInterceptor("admin", "admin1");
+		//restTemplate.setInterceptors(Arrays.asList(interceptor));
 	}
 
 	/**
