@@ -12,6 +12,10 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -23,6 +27,9 @@ import org.springframework.web.client.RestTemplate;
 import com.javaegitimleri.petclinic.model.Owner;
 
 public class PetClinicRestControllerTests {
+	
+	private RestTemplateBuilder restTemplateBuilder;
+	
 	private RestTemplate restTemplate;
 
 	/*
@@ -55,6 +62,14 @@ public class PetClinicRestControllerTests {
         //Eskisi
 		//BasicAuthenticationInterceptor interceptor=new BasicAuthenticationInterceptor("admin", "admin1");
 		//restTemplate.setInterceptors(Arrays.asList(interceptor));
+        
+        // RestTemplateBuilder ile temel kimlik doğrulama ekleme
+		// Kullanıcı adı ve şifre application.properties de sunucuda sakliyor. 
+		// Ben buraya test ederken aynı postmande yazidigm gibi Basic Auth ekliyorum.
+        //restTemplateBuilder = new RestTemplateBuilder();
+        //restTemplate = restTemplateBuilder
+        //        .basicAuthentication("admin", "admin") 
+        //        .build();
 	}
 
 	/**
@@ -83,27 +98,14 @@ public class PetClinicRestControllerTests {
 	}
 	
 	@Test
-	public void testGetOwnersByLastName() {
-		ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:8080/rest/getOwnersWithLastName?ln=ONER", List.class);
-		MatcherAssert.assertThat(response.getStatusCodeValue(), Matchers.equalTo(200));
-		List<Map<String,String>> body = response.getBody();
-		List<String> firstNames = body.stream().map(e->e.get("firstName")).collect(Collectors.toList());
+	public void testGetOwnerByIdBasicAuthWithRestTemplateBuilder() {
+
+		/* Basarili Durum : getOwner/1 den gelen FirstName degeri Alper oldugu icin */
 		
-		//Başarısız Durum
-		//MatcherAssert.assertThat(firstNames,Matchers.containsInAnyOrder("Alper","Mahmut","Asa"));
-		//Başarılı Durum
-		MatcherAssert.assertThat(firstNames,Matchers.containsInAnyOrder("Alper")); //Sadece Alper gelecek diye bekliyorum
-		//Başarılı Durum
-		MatcherAssert.assertThat(firstNames,Matchers.contains("Alper","Asa")); //Gelen sonuc icerisinde Alper ve Asa var ise
-		
-		/*
-		 * MatcherAssert.assertThat(): Bu, bir doğrulama (assertion) yapar. firstNames koleksiyonunun, belirtilen şartları sağladığından emin olmak için kullanılır.
-		 * Matchers.containsInAnyOrder("Alper"): 
-		 * Bu, firstNames koleksiyonunun öğelerinin herhangi bir sırayla "Alper" 
-		 * öğesini içerip içermediğini kontrol eder. Yani, koleksiyonun sırası önemli değildir; 
-		 * yalnızca belirli öğe veya öğeler olup olmadığına bakılır.
-		 * 
-		 * */
+		ResponseEntity<Owner> response = restTemplate.getForEntity("http://localhost:8085/rest/getOwner/1",Owner.class,new HttpEntity<String>(new HttpHeaders()));
+		MatcherAssert.assertThat(response.getStatusCodeValue(), Matchers.equalTo(200)); // gelen sonuc 200 response mu
+		MatcherAssert.assertThat(response.getBody().getFirstName(), Matchers.equalTo("Ziya")); // gelen degerin Ziya olduguna bakıyoruz
+
 	}
 	
 	@Test
