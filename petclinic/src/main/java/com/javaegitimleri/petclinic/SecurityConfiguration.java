@@ -1,16 +1,33 @@
 package com.javaegitimleri.petclinic;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private DataSource dataSource;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//Burayi override edip icerisini bos biraktigimizde defaultsecurityconfig ayarlari(username,pass gibi) ezilir.
+		
+		http.authorizeRequests().antMatchers("/**/favicon.ico", "/css/**", "js/**", "/images/**", "/webjars/**","/rest/owners","/login.html").permitAll();
+		http.authorizeRequests().anyRequest().authenticated();
+		http.formLogin();
+		http.httpBasic();
+		//http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//her istek de dogru basic auth yapsin
 		
 		//http.authorizeRequests().anyRequest().authenticated(); // tüm gelen isteklerin kimlik doğrulama gerektirdiğini belirtir
 		//http.formLogin(); gelen istekler login default sayfasina yonlendirilsin
@@ -31,11 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		Bu ayar, Spring Security'ye oturumsuz bir politika uygulamasını söyler. Böylece, her istek bağımsız olarak doğrulanır.
 		*/
-		
-		http.authorizeRequests().antMatchers("/**/favicon.ico", "/css/**", "js/**", "/images/**", "/webjars/**","/rest/owners").permitAll();
-		http.authorizeRequests().anyRequest().authenticated();
-		http.formLogin();
-		http.httpBasic();
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//her istek de dogru basic auth yapsin
+	
+	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(dataSource);
 	}
 }

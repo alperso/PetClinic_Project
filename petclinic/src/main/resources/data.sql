@@ -23,4 +23,13 @@ INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (11, 'Twetty', '2000-03-0
 INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (12, 'Tarçın', '2000-06-24', 8);
 INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (13, 'Sarı', '2002-06-08', 9);
 
+INSERT INTO USERS VALUES('user1','{noop}user1',TRUE);
+INSERT INTO USERS VALUES('user2','{noop}user2',TRUE);
+INSERT INTO USERS VALUES('user3','{noop}user3',TRUE);
+
+INSERT INTO AUTHORITIES VALUES('user1','ROLE_USER');
+INSERT INTO AUTHORITIES VALUES('user2','ROLE_USER');
+INSERT INTO AUTHORITIES VALUES('user2','ROLE_EDITOR');
+INSERT INTO AUTHORITIES VALUES('user3','ROLE_USER');
+INSERT INTO AUTHORITIES VALUES('user3','ROLE_ADMIN');
  
