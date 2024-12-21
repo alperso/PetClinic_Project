@@ -11,6 +11,7 @@ public class PasswordEncoderTests {
 		System.out.println("{bcrypt}"+passwordEncoder.encode("user1"));
 		System.out.println("{bcrypt}"+passwordEncoder.encode("user2"));
 		System.out.println("{bcrypt}"+passwordEncoder.encode("user3"));
+		System.out.println("{bcrypt}"+passwordEncoder.encode("user4"));
 		
 		
 	}
