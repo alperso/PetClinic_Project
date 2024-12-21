@@ -23,9 +23,15 @@ INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (11, 'Twetty', '2000-03-0
 INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (12, 'Tarçın', '2000-06-24', 8);
 INSERT INTO t_pet (id,name,birth_date,owner_id) VALUES (13, 'Sarı', '2002-06-08', 9);
 
-INSERT INTO USERS VALUES('user1','{noop}user1',TRUE);
-INSERT INTO USERS VALUES('user2','{noop}user2',TRUE);
-INSERT INTO USERS VALUES('user3','{noop}user3',TRUE);
+--Sifrelenmemis hali
+--INSERT INTO USERS VALUES('user1','{noop}user1',TRUE);
+--INSERT INTO USERS VALUES('user2','{noop}user2',TRUE);
+--INSERT INTO USERS VALUES('user3','{noop}user3',TRUE);
+
+INSERT INTO USERS VALUES('user1','{bcrypt}$2a$10$v2skZFsOcSl591Tt6nyK5eQNZukaI3d7qA8Tc9IFAga.uPgRRJDp.',TRUE);
+INSERT INTO USERS VALUES('user2','{bcrypt}$2a$10$moi.ThdISUji4BC9qaVrHep5cFaxF0AexnA4XoRPoGSbcpTY3BiOy',TRUE);
+INSERT INTO USERS VALUES('user3','{bcrypt}$2a$10$VK1pPwEkjtz7Sv4swsmdfuNmq76UhOCmMShJys.n3LmqSvdWDA7bm',TRUE);
+
 
 INSERT INTO AUTHORITIES VALUES('user1','ROLE_USER');
 INSERT INTO AUTHORITIES VALUES('user2','ROLE_USER');
