@@ -67,20 +67,21 @@
 		</dependency>
 
 		<!-- JUnit4 Test Versiyonu icin -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope> <!-- projeye bu bagimlılıkları artifacte (build paketine) dahil etmiyor -->
-		</dependency>
+			<scope>test</scope> 
+		</dependency> -->
+		<!-- <scope>test</scope> projeye bu bagimlılıkları artifacte (build paketine) dahil etmiyor -->
 		<!-- Hamcrest, Java'da koşullu testler yazarken daha esnek ve güçlü eşleştirme yöntemleri sunan bir kütüphanedir. 
 		Özellikle, assertion (doğrulama) işlemlerinde daha doğal, okunabilir ve esnek ifadeler yazmanıza yardımcı olur. 
 		assertThat(5, equalTo(5)); // Beklenen değer 5, gerçek değer de 5. Test başarılı. gibi
 		-->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
-			<scope>test</scope> <!-- projeye bu bagimlılıkları artifacte (build paketine) dahil etmiyor -->
-		</dependency>
+			<scope>test</scope>
+		</dependency>-->
 	
 		<!-- JUnit5 Test Versiyonu için -->
 		<!--<dependency>
@@ -127,6 +128,17 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Test 
+		Not: Uyari Oku
+		(JUnit ve hamcrest bagimligini yukaridaki dependency bagimligindan kaldiriyoruz. 
+		Bunlar spring-boot-starter-test ile projeye dahil ediliyorlar.)
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
