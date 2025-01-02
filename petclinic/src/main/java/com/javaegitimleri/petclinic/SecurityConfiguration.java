@@ -1,30 +1,26 @@
 package com.javaegitimleri.petclinic;
 
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends AbstractSecurityConfiguration {
+//public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+//yaziyordu abstract yaparak araya abstract class koyduk // Yaparak Projede birden fazla güvenlik yapılandırmasi
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private DataSource dataSource;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//Burayi override edip icerisini bos biraktigimizde defaultsecurityconfig ayarlari(username,pass gibi) ezilir.
 		
 		http.authorizeRequests().antMatchers("/**/favicon.ico", "/css/**", "js/**", "/images/**", "/webjars/**","/login.html").permitAll();
-		http.authorizeRequests().antMatchers("/rest/**").access("hasRole('EDITOR')"); //rest/** olan endpointlere sadece editor olanlar erisebilir
+		//http.authorizeRequests().antMatchers("/rest/**").access("hasRole('EDITOR')"); //rest/** olan endpointlere sadece editor olanlar erisebilir//RestSecurityConfiguration.java ya taşındı
 		http.authorizeRequests().antMatchers("/actuator/**").access("hasRole('ADMIN')"); //actuator/** olan endpointlere sadece admin olanlar erisebilir
 		http.authorizeRequests().anyRequest().authenticated();
 		http.formLogin();
@@ -96,10 +92,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		*/
 	
-	}
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(dataSource);
 	}
 }

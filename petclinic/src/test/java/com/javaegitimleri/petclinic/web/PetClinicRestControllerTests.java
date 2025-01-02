@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -232,5 +233,20 @@ public class PetClinicRestControllerTests {
 				MatcherAssert.assertThat(ex.getStatusCode().value(),Matchers.equalTo(404));
 				
 			}
+	}
+	
+	/*--------------------------------------------------------------*/
+	@Test
+	public void testDeleteOwner3() {
+		
+		//restTemplate.delete("http://localhost:8080/rest/deleteOwner/2");
+		ResponseEntity<Void> responseEntity = restTemplate.exchange("http://localhost:8080/rest/owner/1", HttpMethod.DELETE,null,Void.class);
+		
+		try {
+			restTemplate.getForEntity("http://localhost:8080/rest/getOwner/2", Owner.class);
+			Assert.fail("Böyle bir owner bulunamadı");
+		} catch (RestClientException ex) {
+			
+		}
 	}
 }
