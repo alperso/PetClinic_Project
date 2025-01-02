@@ -41,7 +41,10 @@ public class PetClinicRestControllerEmbededTests {
 	@Autowired
 	private TestRestTemplate restTemplate;
 	
-	/* Spring Boot testlerinde HTTP istemcisi olarak kullanılan bir araçtır ve özellikle bir REST API'yi test etmek amacıyla tasarlanmıştır. 
+	/* 
+	 * TestRestTemplate, Spring Boot uygulamalarındaki REST API'lerini test etmek için kullanılır. Bu araç, özellikle entegrasyon testlerinde faydalıdır ve doğru çalışıp çalışmadığını test etmek amacıyla gerçek HTTP istekleri gönderir. 
+	 * RestTemplate'in test için uyarlanmış versiyonudur ve testlerde kullanımı kolaylaştırır.
+	 * Spring Boot testlerinde HTTP istemcisi olarak kullanılan bir araçtır ve özellikle bir REST API'yi test etmek amacıyla tasarlanmıştır. 
 	 * TestRestTemplate, Spring Boot uygulamalarında endpoint'lerin doğru çalıştığını test etmek için kolay ve esnek bir yöntem sunar.
 	 * 
 	 TestRestTemplate ve RestTemplate Arasındaki Farklar:

@@ -1,9 +1,12 @@
 package com.javaegitimleri.petclinic.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.javaegitimleri.petclinic.service.PetClinicService;
 
 /**
  * @Controller, Spring Framework'de kullanılan bir anotasyondur ve temel olarak
@@ -20,6 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PetClinicController {
+	
+	@Autowired
+	private PetClinicService petClinicService;
 
 	/**
 	 * @ResponseBody anotosyonu ekliyoruz. Eger bu anotosyonu olmaz ise web
@@ -78,5 +84,15 @@ public class PetClinicController {
 		mav.setViewName("index");
 		return mav;
 	}
+	
+	@RequestMapping("/owners")
+	public ModelAndView getOwners() {
+		ModelAndView maw= new ModelAndView();
+		maw.addObject("owners", petClinicService.findOwners());
+		maw.setViewName("owners");
+		return maw;
+
+	}
+ 
 
 }
