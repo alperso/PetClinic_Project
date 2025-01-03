@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.javaegitimleri.petclinic.model.Owner;
 import com.javaegitimleri.petclinic.service.PetClinicService;
@@ -28,7 +29,7 @@ public class PetClinicEditOwnerController {
 	}
 	
 	@RequestMapping(value="/owners/update/{id}",method=RequestMethod.POST)
-	public String handleFormSubmit(@ModelAttribute @Valid Owner owner, BindingResult validationErrorShow) {
+	public String handleFormSubmit(@ModelAttribute @Valid Owner owner, BindingResult validationErrorShow, RedirectAttributes redirectAttributes) {
 		
 		//Hata olursa (firstName ve LastName null olamazdı)
 		if(validationErrorShow.hasErrors()) {
@@ -36,6 +37,7 @@ public class PetClinicEditOwnerController {
 		}
 		
 		petClinicService.updateOwner(owner);
+		redirectAttributes.addFlashAttribute("message", "Owner update with id :"+owner.getId());
 		return "redirect:/owners";
 		
 	}
