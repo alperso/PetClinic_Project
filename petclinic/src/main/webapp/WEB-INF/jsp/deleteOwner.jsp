@@ -90,10 +90,14 @@
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <form:input path="firstName" id="firstName" />
+                <br/>
+                <form:errors path="firstName" cssStyle="color:red"/>
             </div>
             <div class="form-group">
                 <label for="lastName">Last Name:</label>
                 <form:input path="lastName" id="lastName" />
+                <br/>
+                <form:errors path="lastName" cssStyle="color:red"/>
             </div>
             <div class="form-button">
                 <form:button name="submit">Delete</form:button>
