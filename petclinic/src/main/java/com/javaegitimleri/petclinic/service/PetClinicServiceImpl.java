@@ -75,15 +75,34 @@ public class PetClinicServiceImpl implements PetClinicService {
 	public void createOwner(Owner owner) {
 	   ownerRepository.createOwner(owner);
 	   
-	   //Mail gondersin
-	   SimpleMailMessage msg = new SimpleMailMessage();
-	   msg.setFrom("k@s");
-	   msg.setTo("m@y");
-	   msg.setSubject("Owner created!");
-	   msg.setText("Owner entity with id :"+ owner.getId() + " created succesfully.");
-	   
-	   javaMailSender.send(msg);
+	   try {
+		   //Mail gondersin
+		   SimpleMailMessage msg = new SimpleMailMessage();
+		   msg.setFrom("k@s");
+		   msg.setTo("m@y");
+		   msg.setSubject("Owner created!");
+		   msg.setText("Owner entity with id :"+ owner.getId() + " created succesfully.");
+		   
+		   javaMailSender.send(msg);
+	   } catch(Exception e) {
+		   //Bir sey yapma
+	   }
+
 	}
+	
+//	@Override
+//	public void createOwner(Owner owner) {
+//	   ownerRepository.createOwner(owner);
+//	   
+//	   //Mail gondersin
+//	   SimpleMailMessage message = new SimpleMailMessage();
+//      // message.setFrom("alper@gmail.com");  // Gönderen e-posta adresi yazilmaz ise application.properties den alinir
+//       message.setTo("gonderilecek@gmail.com");  // Alıcı e-posta adresi
+//       message.setSubject("Deneme");  // E-posta konusu
+//       message.setText("Spring Boot Deneme");  // E-posta içeriği
+//       
+//       javaMailSender.send(message);  // E-posta gönderimi
+//	}
 
 	@Override
 	public void updateOwner(Owner owner) {
