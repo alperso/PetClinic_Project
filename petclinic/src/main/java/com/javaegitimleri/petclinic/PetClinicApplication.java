@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.annotation.PostConstruct;
 /*
@@ -18,11 +19,11 @@ Properties dosyasıyla erişip değerleri alabilecegiz
 Servletleri scan etmesi icin kullanilir.
 claspath de servlet ve Filterlern olan sınıfları otomatik tespit eder.
 
-
 */
 @ServletComponentScan
 @SpringBootApplication
 @EnableConfigurationProperties(value=PetClinicProperties.class)
+@EnableJpaAuditing
 public class PetClinicApplication {
 
 	@Autowired
