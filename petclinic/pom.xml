@@ -153,6 +153,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		
+		<!-- Spring Data Rest -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		
+		<!-- Spring Data Rest Hal Browser(Hateos gibi rest isteklerin detayini gorme) -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-hal-browser</artifactId>
+		</dependency>
+	
 
 	</dependencies>
 
