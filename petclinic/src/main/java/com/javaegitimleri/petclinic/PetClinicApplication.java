@@ -23,7 +23,7 @@ claspath de servlet ve Filterlern olan sınıfları otomatik tespit eder.
 @ServletComponentScan
 @SpringBootApplication
 @EnableConfigurationProperties(value=PetClinicProperties.class)
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "petClinicAuditorAware")
 public class PetClinicApplication {
 
 	@Autowired
