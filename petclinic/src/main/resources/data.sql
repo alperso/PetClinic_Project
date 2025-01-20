@@ -39,4 +39,9 @@ INSERT INTO AUTHORITIES VALUES('user2','ROLE_USER');
 INSERT INTO AUTHORITIES VALUES('user2','ROLE_EDITOR');
 INSERT INTO AUTHORITIES VALUES('user3','ROLE_USER');
 INSERT INTO AUTHORITIES VALUES('user4','ROLE_SECRETER');
+
+
+INSERT INTO t_vet (id,first_name,last_name) VALUES (14, 'Ali', 'Güç');
+INSERT INTO t_vet (id,first_name,last_name) VALUES (15, 'Bekir', 'Sağ');
+INSERT INTO t_vet (id,first_name,last_name) VALUES (16, 'Esma', 'Kul');
  

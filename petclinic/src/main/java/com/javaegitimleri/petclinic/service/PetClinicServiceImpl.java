@@ -1,6 +1,7 @@
 package com.javaegitimleri.petclinic.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.javaegitimleri.petclinic.dao.OwnerRepository;
 import com.javaegitimleri.petclinic.dao.PetRepository;
+import com.javaegitimleri.petclinic.dao.jpa.VetRepository;
 import com.javaegitimleri.petclinic.exception.OwnerNotFoundException;
+import com.javaegitimleri.petclinic.exception.VetNotFoundException;
 import com.javaegitimleri.petclinic.model.Owner;
+import com.javaegitimleri.petclinic.model.Vet;
 
 
 /*
@@ -51,6 +55,9 @@ public class PetClinicServiceImpl implements PetClinicService {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	@Autowired 
+	private VetRepository vetRepository;
 	
 	@Override
 	@Secured(value = {"ROLE_USER","ROLE_EDITOR"})
@@ -115,6 +122,18 @@ public class PetClinicServiceImpl implements PetClinicService {
 		ownerRepository.deleteOwner(id);
 
 		//if(true) throw new RuntimeException("testing rollback"); //hata versin ki rollback yapsin
+	}
+
+	@Override
+	public List<Vet> findVets() {
+		return vetRepository.findAll();
+	}
+
+	@Override
+	public Vet findVet(Long id) throws VetNotFoundException {
+		return vetRepository.findById(id).orElseThrow(()->{ 
+			return new VetNotFoundException("Vet not found by id:" + id); 
+			});
 	}
 
 }
