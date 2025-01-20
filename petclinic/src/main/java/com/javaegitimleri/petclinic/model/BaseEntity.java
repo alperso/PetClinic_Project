@@ -89,7 +89,7 @@ public abstract class BaseEntity {
 	private String updatedBy;
 	
 	@LastModifiedDate
-	private String updatedDate;
+	private Date updatedDate;
 	
 	public Long getId() {
 		return id;
@@ -123,11 +123,11 @@ public abstract class BaseEntity {
 		this.updatedBy = updatedBy;
 	}
 
-	public String getUpdatedDate() {
+	public Date getUpdatedDate() {
 		return updatedDate;
 	}
 
-	public void setUpdatedDate(String updatedDate) {
+	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
 	
