@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.annotation.Secured;
@@ -78,7 +79,20 @@ public class PetClinicServiceImpl implements PetClinicService {
 
 	}
 
+	/*
+	 * @CacheEvict(cacheNames="allOwners", allEntries=true)
+	 * 
+	 * allOwners adını cachelemiştik controllerde /owners de
+	 * allEntries ile allOwners adındaki tüm değerleri hepsini cache den sildik.
+	 * 
+	 * CacheEvict anotasyonunu ekledikten sonra senaryoda 
+	 * İlk tetikledigimiz http://localhost:8080/rest/owners sonrasında yeni bir sekmede 
+	 * Burada yeni sekmede http://localhost:8080/owners/new çagırılarak yeni ekleme yaptıgımızda cache'i sildigi icin 
+	 * method çalısacak ve db sorgusunda yeni eklenen kayıtlarla birlikte güncel liste gelecektir.
+	 * */
+	
 	@Override
+	@CacheEvict(cacheNames="allOwners", allEntries=true)
 	public void createOwner(Owner owner) {
 	   ownerRepository.createOwner(owner);
 	   
@@ -96,6 +110,25 @@ public class PetClinicServiceImpl implements PetClinicService {
 	   }
 
 	}
+	
+//	@Override
+//	public void createOwner(Owner owner) {
+//	   ownerRepository.createOwner(owner);
+//	   
+//	   try {
+//		   //Mail gondersin
+//		   SimpleMailMessage msg = new SimpleMailMessage();
+//		   msg.setFrom("k@s");
+//		   msg.setTo("m@y");
+//		   msg.setSubject("Owner created!");
+//		   msg.setText("Owner entity with id :"+ owner.getId() + " created succesfully.");
+//		   
+//		   javaMailSender.send(msg);
+//	   } catch(Exception e) {
+//		   //Bir sey yapma
+//	   }
+//
+//	}
 	
 //	@Override
 //	public void createOwner(Owner owner) {

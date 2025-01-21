@@ -31,10 +31,55 @@ public class PetClinicRestController {
 	@Autowired
 	private PetClinicService petClinicService;
 
+	/*@Cacheable("allOwners") yazdım buraya ilk defa istek attıgımda servis cagrilir. 
+	 * 2. istek attigimde ise buraya girmiyor Cache deki return degerini getirir
+	 * Neden?
+	 * 
+	 * @Cacheable anotasyonunun çalışma prensibinden kaynaklanmaktadır. 
+	 * @Cacheable, bir metot çağrıldığında önce önbellekte ilgili sonucu arar. 
+	 * Eğer önbellekte bir sonuç varsa, metodu çalıştırmadan doğrudan önbellekteki sonucu döner. 
+	 * Bu nedenle, ikinci istek yapıldığında getOwners() metodu çağrılmayacak ve ">>>inside getOwners...." çıktısı konsola yazılmayacaktır.
+	 * 
+	 * @Cacheable Nasıl Çalışır?
+		İlk çağrıda:
+
+		@Cacheable, verilen cache adıyla ("allOwners") önbellekte ilgili bir sonuç arar.
+		Eğer önbellekte bir sonuç yoksa, metot çalıştırılır ve dönen sonuç önbelleğe kaydedilir.
+		İkinci ve sonraki çağrılarda:
+		
+		@Cacheable, önbellekte ilgili bir sonuç bulursa, metodu çalıştırmadan doğrudan önbellekteki sonucu döner.
+	 * 
+	 * Mahmut Duman Açıklama:
+	 * Cache kısmında denemelerde restController methoduna caching yapmıstık
+		    public class PetClinicRestController {
+		        @Cacheable("allOwners")//cachede yoksa methodu çalıstırıyor varsa cacheden getiriyor.
+		        @RequestMapping(method = RequestMethod.GET, value = "/owners")
+		        public ResponseEntity<List<Owner>> getOwners() {
+		            System.out.println(">>>inside getOwners...");
+		            List<Owner> owners = petClinicService.findOwners();
+		            return ResponseEntity.ok(owners);
+		        }
+		        //...
+		    }
+		 
+		http://localhost:8080/rest/owners url ine tarayıcıdan get istegi attıgımızda 
+		Basic Auth yetkisi olan (user2,user2) ile auth yapılarak istek atılır.
+		 
+		İlk istekte method cache de olmadıgı için method çalışır.
+		Logda >>>inside getOwners... yazarak methoda girdigi anlasılır.
+		ikinci http://localhost:8080/rest/owners isteginde tetikledigimizde cache'de oldugu için methoda girmez cache'den getirilir.
+	 * 
+	 * */
 	@Cacheable("allOwners")
 	@RequestMapping(method = RequestMethod.GET, value = "/owners")
 	public ResponseEntity<List<Owner>> getOwners() {
 		System.out.println(">>>inside getOwners....");
+		List<Owner> findOwners = petClinicService.findOwners();
+		return ResponseEntity.ok(findOwners);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/owners4")
+	public ResponseEntity<List<Owner>> getOwners4() {
 		List<Owner> findOwners = petClinicService.findOwners();
 		return ResponseEntity.ok(findOwners);
 	}
