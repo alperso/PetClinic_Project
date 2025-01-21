@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,7 @@ claspath de servlet ve Filterlern olan sınıfları otomatik tespit eder.
 @SpringBootApplication
 @EnableConfigurationProperties(value=PetClinicProperties.class)
 @EnableJpaAuditing(auditorAwareRef = "petClinicAuditorAware")
+@EnableCaching
 public class PetClinicApplication {
 
 	@Autowired
