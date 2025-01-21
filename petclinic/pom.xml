@@ -171,6 +171,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
+		
+		<!-- Spring Validation-->
+		<!-- Spring starter web anatasyonu bunu sagladıgı için yazamayabiliriz aksi durumda validasyon için yazmamız gerekli -->
+		<!-- yurakida yazdim zaten
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency> -->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-validation</artifactId>-->
+<!--		</dependency>-->
+
 	
 
 	</dependencies>

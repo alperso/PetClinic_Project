@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -17,6 +20,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -57,7 +61,7 @@ public class PetClinicRestControllerTests {
 		restTemplate = new RestTemplate();
 
         // Yeni BasicAuthenticationInterceptor kullanimi
-        ClientHttpRequestInterceptor basicAuthInterceptor = new BasicAuthenticationInterceptor("admin", "admin1");
+        ClientHttpRequestInterceptor basicAuthInterceptor = new BasicAuthenticationInterceptor("user2", "user2");
         restTemplate.setInterceptors(Collections.singletonList(basicAuthInterceptor));
 
         //Eskisi
@@ -248,5 +252,43 @@ public class PetClinicRestControllerTests {
 		} catch (RestClientException ex) {
 			
 		}
+	}
+	
+	/*---------------------------@Valid ornegi-----------------------------------*/
+	
+	@Test
+	public void testServiceLevelValidation() {
+		Owner owner = new Owner();
+		/*
+		@NotEmpty
+		@Column(name="first_name")
+		private String firstName;
+		
+		@NotEmpty
+		@Column(name="last_name")
+		private String lastName;
+		
+		@NotEmpty yapmistik bunlari 
+		
+		//owner.setLastName();
+		//owner.setFirstName();
+		
+		bilerek bos birakiyorum.
+		
+		java -jar C:\DEV\PetClinic_Project\document\fakeSmtp\fakeSMTP-2.0.jar
+		
+		*/
+		//Failed
+		//owner.setFirstName(null);
+		//owner.setLastName(null);
+		
+		//Success
+		owner.setFirstName("Alper");
+		owner.setLastName("Deneme");
+		
+		ResponseEntity<URI> responseForEntity = restTemplate.postForEntity("http://localhost:8080/rest/createOwner", owner, URI.class);
+		MatcherAssert.assertThat(responseForEntity.getStatusCode(), Matchers.equalTo(HttpStatus.PRECONDITION_FAILED));//HttpStatus.PRECONDITION_FAILED bunun gelmesini bekliyorum.
+		
+		
 	}
 }
